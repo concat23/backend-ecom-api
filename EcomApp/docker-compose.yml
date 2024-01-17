@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  ecom_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ecom-app
+    container_name: ecom-app
+    restart: unless-stopped
+    volumes:
+      - .:/var/www/html
+    networks:
+      - ecom-network
+    depends_on:
+      - ecom_database
+    ports:
+      - "8087:80"  # Adjust this if your PHP-FPM listens on a different port
+    environment:
+      PHP_MEMORY_LIMIT: 256M
+
+  ecom_database:
+    image: mysql:latest
+    container_name: ecom-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ecom_db
+      MYSQL_USER: ecom_user
+      MYSQL_PASSWORD: ecom_password
+      MYSQL_ROOT_PASSWORD: root_password
+    networks:
+      - ecom-network
+    ports:
+      - "3307:3306"  # Use the default MySQL port unless there's a specific reason not to
+    volumes:
+      - database_data:/var/lib/mysql
+
+  config_manager:
+    image: nginx:latest
+    container_name: config-manager
+    restart: unless-stopped
+    volumes:
+      - ./nginx-conf:/etc/nginx/conf.d/
+    networks:
+      - ecom-network
+    ports:
+      - "8080:80"
+
+networks:
+  ecom-network:
+    driver: bridge
+
+volumes:
+  database_data:
