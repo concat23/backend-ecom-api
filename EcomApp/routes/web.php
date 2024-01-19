@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\AuthenController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,4 +16,3 @@ use App\Http\Controllers\Api\AuthenController;
 Route::get('/', function () {
     return view('welcome');
 });
-
