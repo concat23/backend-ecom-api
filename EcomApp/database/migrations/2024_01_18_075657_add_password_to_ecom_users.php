@@ -6,16 +6,13 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-   
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('ecom_users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
+        Schema::table('ecom_users', function (Blueprint $table) {
+            $table->string('password')->after('email');
         });
     }
 
@@ -24,6 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ecom_users');
+        Schema::table('ecom_users', function (Blueprint $table) {
+            //
+            $table->dropColumn('password');
+        });
     }
 };
